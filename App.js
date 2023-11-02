@@ -1,20 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { styles, Colors } from './src/style/style'
+import { StyleSheet, Text, View, Button, SafeAreaView, Platform } from 'react-native';
+import { useState } from 'react';
+import Timer from './src/components/timer.component';
+import Header from './src/components/header.component';
 
 export default function App() {
+  const [isWorking, setisWorking] = useState(false);
+  const [time , setTime] = useState(25*60);
+  const [currentTime, setCurrentTime] = useState("POMO"|"SHORT"|"LONG");
+  const exchangebgColor = [Colors.A300, Colors.A200, Colors.tersiary];
+  const [isActive, setIsActive] = useState(false);
+
+  const handleStart = () => {
+    setIsActive(!isActive);
+  };
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: exchangebgColor[currentTime] },
+      ]}
+    >
+      <Header
+        setTimer={setTime}
+        currentTimer={currentTime}
+        setCurrentTimer={setCurrentTime}
+      />
+      <Timer time={time} />
+      <Button onPress={() => handleStart()} title={ isActive ? "end" : "start"} />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
